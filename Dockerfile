@@ -3,46 +3,28 @@ FROM openjdk:13-alpine
 # Create app directory
 WORKDIR /usr/src/app
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY *.zip ./
-
-RUN unzip *.zip
-# If you are building your code for production
-# RUN npm install --only=production
-
-# Bundle app source
 COPY init.sh .
 COPY boot.sh .
 
-# RUN apt-get update && apt-get install -y \
-#     rsync \
-#  && rm -rf /var/lib/apt/lists/* \
-#  && mkdir -p /downloads /config \
-#  && ln -s /config/config.js /usr/src/app/node_modules/put.io-sync/config.js \
-#  && deluser -q nobody \
-#  && useradd -Ms /bin/bash -u 99 -g 100 nobody \
-#  && chown -R 99:100 /usr/src/app
-
-RUN mkdir -p /config/logs \
-	&& mv conf/powerwall.ini conf/powerwall.ini.orig && mv conf/pvoutput.ini conf/pvoutput.ini.orig \
+RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.7/community" >> /etc/apk/repositories \
+    && apk --update upgrade \
+	&& apk add curl bash runit tzdata \
+	&& curl -sLO https://bitbucket.org/pvoutput/pvoutput-integration-service/downloads/org.pvoutput.integration.v1.5.4.zip \
+	&& unzip *.zip \
+	&& rm -rf *.zip src \
+	&& mkdir -p /config/logs \
+	&& mv conf/powerwall.ini conf/powerwall.ini.orig \
+	&& mv conf/pvoutput.ini conf/pvoutput.ini.orig \
 	&& ln -sf /config/powerwall.ini /usr/src/app/conf/ \
 	&& ln -sf /config/pvoutput.ini /usr/src/app/conf/ \
-	&& rmdir logs && ln -sf /config/logs /usr/src/app/logs 
-# 	&& deluser nobody \
-# 	&& adduser -Ds /bin/sh -u 99 -G users nobody \
-# 	&& chown -R 99:100 /usr/src/app
-
-
-RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.7/community" >> /etc/apk/repositories  && \
-    apk --update upgrade && \
-    apk add bash runit tzdata && \
-    rm -rf /var/cache/apk/* && \
-    chmod +x boot.sh && \
-    mkdir -p /etc/run_once && \
-	mkdir -p /etc/service/pvoutput && \
-	ln -s /usr/src/app/init.sh /etc/service/pvoutput/run 
+	&& rmdir logs \
+	&& ln -sf /config/logs /usr/src/app/logs \
+    && chmod +x boot.sh \
+    && mkdir -p /etc/run_once \
+	&& mkdir -p /etc/service/pvoutput \
+	&& ln -s /usr/src/app/init.sh /etc/service/pvoutput/run \
+	&& apk del curl \
+    && rm -rf /var/cache/apk/* 
 	# chmod 777 /etc && \
 	# chown -R 99:100 /etc/sv
  
