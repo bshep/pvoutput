@@ -3,7 +3,7 @@ FROM openjdk:13-alpine
 # Create app directory
 WORKDIR /usr/src/app
 
-COPY *.sh .
+COPY *.sh ./
 
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.7/community" >> /etc/apk/repositories \
     && apk --update upgrade \
