@@ -3,8 +3,7 @@ FROM openjdk:13-alpine
 # Create app directory
 WORKDIR /usr/src/app
 
-COPY init.sh .
-COPY boot.sh .
+COPY *.sh .
 
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.7/community" >> /etc/apk/repositories \
     && apk --update upgrade \
@@ -19,7 +18,7 @@ RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.7/community" >> /etc/apk/repos
 	&& ln -sf /config/pvoutput.ini /usr/src/app/conf/ \
 	&& rmdir logs \
 	&& ln -sf /config/logs /usr/src/app/logs \
-    && chmod +x boot.sh \
+    && chmod +x *.sh \
     && mkdir -p /etc/run_once \
 	&& mkdir -p /etc/service/pvoutput \
 	&& ln -s /usr/src/app/init.sh /etc/service/pvoutput/run \
