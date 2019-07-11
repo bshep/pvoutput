@@ -7,7 +7,7 @@ COPY *.sh ./
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.7/community" >> /etc/apk/repositories \
 	&& apk --update upgrade \
 	&& apk add curl bash runit tzdata \
-	&& curl -sLO https://bitbucket.org/pvoutput/pvoutput-integration-service/downloads/org.pvoutput.integration.v1.5.4.zip \
+	&& curl -sLO https://bitbucket.org/pvoutput/pvoutput-integration-service/downloads/org.pvoutput.integration.v1.5.4.1.zip \
 	&& unzip *.zip \
 	&& rm -rf *.zip src \
 	&& mkdir -p /config/logs \
