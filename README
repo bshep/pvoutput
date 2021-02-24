@@ -1,0 +1,11 @@
+Docker port of: <url>https://forum.pvoutput.org/t/powerwall-extended-parameters/298</url>
+
+To use:
+<li>map <code>/config</code> to a directory on the host where settings will live 
+<li>set <code>TZ</code> to your timezone, ex. <code>'America/Chicago'</code>
+<li>Run container once
+<li>Edit <code>pvoutput.ini</code> and <code>powerwall.ini</code> to suit your needs.
+
+Logs will be put in a directory called <code>logs</code> inside your <code>/config</code> directory.
+
+If using the <code>dual</code> tag then you will have two config directories under <code>/config/</code>, it will be <code>/config/in</code> for the service that log input to the system and <code>/config/out/</code> for the one that collects output data.
